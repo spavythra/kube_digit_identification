@@ -30,7 +30,7 @@ if train_new_model:
     model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     # Training the model
-    model.fit(X_train, y_train, epochs=3)
+    model.fit(X_train, y_train, epochs=30)
 
     # Evaluating the model
     val_loss, val_acc = model.evaluate(X_test, y_test)

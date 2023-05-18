@@ -4,6 +4,25 @@ import axios from 'axios';
 function App() {
   const [prediction, setPrediction] = useState(null);
   const [selectedImage, setSelectedImage] = useState('');
+
+  const [text, setText] = useState('');
+  const [translation, setTranslation] = useState('');
+
+  const handleChange = (event) => {
+    console.log(event.target.value)
+    setText(event.target.value);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await axios.post('/translate', { text });
+      setTranslation(response.data);
+    } catch (error) {
+      console.error('Error translating text:', error);
+    }
+  };
   // const inputRef = useRef(null);
 
   function handleImage(e) {
@@ -29,13 +48,23 @@ function App() {
     }
   }
 
+
   return (
+    <div>
     <div>
       <form onSubmit={handleUpload}>
         <input type="file" accept="image/*" onChange={handleImage} />
         <button type="submit">Recognize Digit</button>
       </form>
       {prediction && <p>Prediction: {prediction}</p>}
+    </div>
+
+    <div>
+      <form onSubmit={handleSubmit}>
+        <button value={prediction} onClick={handleChange}>Translate</button>
+      </form>
+      {translation && <div>Translation: {translation}</div>}
+    </div>
     </div>
   );
 }
