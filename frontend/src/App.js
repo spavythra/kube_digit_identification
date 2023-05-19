@@ -7,6 +7,28 @@ function App() {
 
   const [text, setText] = useState('');
   const [translation, setTranslation] = useState('');
+  const [textToSpeech, setTextToSpeech] = useState('');
+  const [audioUrl, setAudioUrl] = useState('');
+
+  const handleSpeech = (event) => {
+    console.log(translation)
+    setTextToSpeech(event.target.value)
+    // setText(event.target.value);
+  };
+
+  const convertTextToSpeech = async () => {
+    try {
+      console.log("kkkk")
+      const response = await axios.post('/text-to-speech', translation, {
+        headers: {
+          'Content-Type': 'application/json', // Replace with the appropriate media type
+        },
+      });
+      setAudioUrl(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleChange = (event) => {
     console.log(event.target.value)
@@ -64,6 +86,12 @@ function App() {
         <button value={prediction} onClick={handleChange}>Translate</button>
       </form>
       {translation && <div>Translation: {translation}</div>}
+    </div>
+    <div>
+    <form onSubmit={handleSpeech}>
+        <button value={translation} onClick={convertTextToSpeech}>Play</button>
+        </form>
+      {audioUrl && <audio src={audioUrl} controls />}
     </div>
     </div>
   );

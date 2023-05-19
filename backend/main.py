@@ -1,12 +1,13 @@
 import io
 import sys
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 import base64
 from PIL import Image
 import numpy as np
 import tensorflow as tf
 from num2words import num2words
 import requests, uuid, json
+import azure.cognitiveservices.speech as speechsdk
 
 # Load the pre-trained digit recognition model
 model = tf.keras.models.load_model("handwritten_digits.model")
@@ -16,6 +17,27 @@ app = Flask(__name__)
 
 subscription_key = '5efaa84b0a274d7c800f70a964db12b4'
 endpoint = 'https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=fi'
+
+def initialize_speech_synthesizer():
+    speech_config = speechsdk.SpeechConfig(subscription="6bded7ed71f240cfadb371b67265fc4c", region="northeurope")
+    synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config)
+    return synthesizer
+
+
+@app.route('/text-to-speech', methods=['POST'])
+def convert_text_to_speech():
+    print('Hello world!', request.json, file=sys.stderr)
+    text = request.json
+    synthesizer = initialize_speech_synthesizer()
+    result = synthesizer.speak_text_async(text).get()
+    if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
+        audio_stream = speechsdk.AudioDataStream(result.audio_data)
+        audio_file_path = 'D:\IntelligentCloud\cnn-from-scratch\test_images'
+        audio_stream.save_to_wav_file(audio_file_path)
+        return send_file(audio_file_path, mimetype='audio/wav')
+    else:
+        return "Error occurred during speech synthesis"
+
 
 @app.route('/translate', methods=['POST'])
 def translate_text():
