@@ -7,14 +7,7 @@ function App() {
 
   const [text, setText] = useState('');
   const [translation, setTranslation] = useState('');
-  const [textToSpeech, setTextToSpeech] = useState('');
   const [audioUrl, setAudioUrl] = useState('');
-
-  const handleSpeech = (event) => {
-    console.log(translation)
-    setTextToSpeech(event.target.value)
-    // setText(event.target.value);
-  };
 
   const convertTextToSpeech = async () => {
     try {
@@ -89,7 +82,7 @@ function App() {
     </div>
     <div>
     <form onSubmit={handleSpeech}>
-        <button value={translation} onClick={convertTextToSpeech}>Play</button>
+        <button type="button" value={translation} onClick={convertTextToSpeech}>Play</button>
         </form>
       {audioUrl && <audio src={audioUrl} controls />}
     </div>

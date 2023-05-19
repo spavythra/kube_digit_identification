@@ -31,10 +31,11 @@ def convert_text_to_speech():
     synthesizer = initialize_speech_synthesizer()
     result = synthesizer.speak_text_async(text).get()
     if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
-        audio_stream = speechsdk.AudioDataStream(result.audio_data)
-        audio_file_path = 'D:\IntelligentCloud\cnn-from-scratch\test_images'
-        audio_stream.save_to_wav_file(audio_file_path)
-        return send_file(audio_file_path, mimetype='audio/wav')
+        print('Hello world!', result.reason, file=sys.stderr)
+        # audio_stream = speechsdk.AudioDataStream(result.audio_data)
+        # audio_file_path = 'D:\IntelligentCloud\cnn-from-scratch\test_images\output.wav'
+        # audio_stream.save_to_wav_file(audio_file_path)
+        # return send_file(audio_file_path, mimetype='audio/wav')
     else:
         return "Error occurred during speech synthesis"
 
