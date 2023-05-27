@@ -1,4 +1,5 @@
 import io
+import os
 import sys
 from flask import Flask, request, jsonify, send_file
 import base64
@@ -7,7 +8,11 @@ import numpy as np
 import tensorflow as tf
 from num2words import num2words
 import requests, uuid, json
+from azure.cognitiveservices.speech import SpeechSynthesizer, SpeechConfig, AudioDataStream
+from azure.cognitiveservices.speech.audio import AudioOutputConfig
+from pydub import AudioSegment
 import azure.cognitiveservices.speech as speechsdk
+import shutil
 
 # Load the pre-trained digit recognition model
 model = tf.keras.models.load_model("handwritten_digits.model")
@@ -19,7 +24,9 @@ subscription_key = '5efaa84b0a274d7c800f70a964db12b4'
 endpoint = 'https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=fi'
 
 def initialize_speech_synthesizer():
-    speech_config = speechsdk.SpeechConfig(subscription="6bded7ed71f240cfadb371b67265fc4c", region="northeurope")
+    speech_key = '6bded7ed71f240cfadb371b67265fc4c'
+    service_region = 'northeurope'
+    speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
     synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config)
     return synthesizer
 
@@ -27,17 +34,51 @@ def initialize_speech_synthesizer():
 @app.route('/text-to-speech', methods=['POST'])
 def convert_text_to_speech():
     print('Hello world!', request.json, file=sys.stderr)
-    text = request.json
-    synthesizer = initialize_speech_synthesizer()
-    result = synthesizer.speak_text_async(text).get()
+    speech_key = '6bded7ed71f240cfadb371b67265fc4c'
+    service_region = 'northeurope'
+    speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
+    file_name = "outputaudio.wav"
+    file_config = speechsdk.audio.AudioOutputConfig(filename=file_name)
+    speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=file_config)
+    text = "The given number is "+request.json
+    result = speech_synthesizer.speak_text_async(text).get()
     if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
-        print('Hello world!', result.reason, file=sys.stderr)
+            current_directory = os.getcwd()  # Use the current working directory
+
+            # Specify the path to the frontend folder relative to the current directory
+            # frontend_folder = os.path.join(current_directory, '../frontend/src')
+
+            # # Create a new folder inside the frontend folder
+            # new_folder_name = 'my_folder'
+            audio_file_path = os.path.join(current_directory, file_name)
+            # os.makedirs(new_folder_path)
+            stream = AudioDataStream(result)
+            stream.save_to_wav_file(file_name)
+            print(audio_file_path)
+            shutil.copy('./outputaudio.wav', '../frontend/src')
+    else :
+        print("Error processing the audio")
+
+    return send_file(audio_file_path, mimetype='audio/wav')
+
+        # out = io.BytesIO()
+        # synthesizer.save_wave(result, out)
+        # return send_file(out, mimetype='audio/wav')
+
         # audio_stream = speechsdk.AudioDataStream(result.audio_data)
-        # audio_file_path = 'D:\IntelligentCloud\cnn-from-scratch\test_images\output.wav'
-        # audio_stream.save_to_wav_file(audio_file_path)
-        # return send_file(audio_file_path, mimetype='audio/wav')
-    else:
-        return "Error occurred during speech synthesis"
+        #  # Specify the directory to save the audio file
+        # current_directory = 'C:\\Users\\pavit\\Desktop\\mygit_remote\\digit_identification\\backend\\audio.wav'
+
+        # # Generate a unique file name
+        # # file_name = 'audio.wav'
+
+        # print('Hello world!', result.reason, file=sys.stderr)
+        # audio_stream.save_to_wav_file(current_directory)
+        # # audio_file_path = os.path.join(current_directory, file_name)
+
+        # return send_file(current_directory, mimetype='audio/wav')
+    # else:
+    #     return "Error occurred during speech synthesis"
 
 
 @app.route('/translate', methods=['POST'])

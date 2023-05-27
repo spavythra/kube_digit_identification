@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import soundfile from './outputaudio.wav'
 
 function App() {
   const [prediction, setPrediction] = useState(null);
@@ -9,19 +10,40 @@ function App() {
   const [translation, setTranslation] = useState('');
   const [audioUrl, setAudioUrl] = useState('');
 
+  // const convertTextToSpeech = async () => {
+  //   try {
+  //     await axios.post('/text-to-speech', translation, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'responseType': 'blob', // Replace with the appropriate media type
+  //       },
+  //     })
+  //     .then((response) => {
+  //       const blob = new Blob([response.data], { type: 'audio/wav' })
+  //       const newUrl = URL.createObjectURL(blob);
+  //       setAudioUrl(newUrl);
+  //       setTest(newUrl);
+  //       console.log(test)
+  //     })
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
   const convertTextToSpeech = async () => {
-    try {
-      console.log("kkkk")
-      const response = await axios.post('/text-to-speech', translation, {
-        headers: {
-          'Content-Type': 'application/json', // Replace with the appropriate media type
-        },
-      });
-      setAudioUrl(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+      try {
+        await axios.post('/text-to-speech', translation, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => {
+        setAudioUrl(response.data);
+      })
+      } catch (error) {
+        console.error(error.response.data);
+      }
+    };
 
   const handleChange = (event) => {
     console.log(event.target.value)
@@ -81,11 +103,20 @@ function App() {
       {translation && <div>Translation: {translation}</div>}
     </div>
     <div>
-    <form onSubmit={handleSpeech}>
+    <form>
         <button type="button" value={translation} onClick={convertTextToSpeech}>Play</button>
         </form>
-      {audioUrl && <audio src={audioUrl} controls />}
+      {audioUrl && <audio src={soundfile} controls />}
     </div>
+
+    {/* <button onClick={convertTextToSpeech}>Generate Audio</button>
+      {audioUrl && (
+        <div>
+          <audio controls>
+            <source src='./outputaudio.wav' type="audio/wav" />
+          </audio>
+        </div>
+      )} */}
     </div>
   );
 }
