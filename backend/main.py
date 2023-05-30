@@ -2,20 +2,17 @@ import io
 import os
 import sys
 from flask import Flask, request, jsonify, send_file
-import base64
 from PIL import Image
 import numpy as np
 import tensorflow as tf
 from num2words import num2words
-import requests, uuid, json
-from azure.cognitiveservices.speech import SpeechSynthesizer, SpeechConfig, AudioDataStream
-from azure.cognitiveservices.speech.audio import AudioOutputConfig
-from pydub import AudioSegment
+import requests, uuid
+from azure.cognitiveservices.speech import AudioDataStream
 import azure.cognitiveservices.speech as speechsdk
 import shutil
 
 # Load the pre-trained digit recognition model
-model = tf.keras.models.load_model("handwritten_digits.model")
+model = tf.keras.models.load_model("handwritten_digits.h5")
 
 # Define the Flask app
 app = Flask(__name__)
@@ -129,6 +126,7 @@ def recognize_digit():
     # Get uploaded file from request
     file = request.files['image']
 
+    print("the file is ",file)
     # Read image file
     image = Image.open(io.BytesIO(file.read()))
 
@@ -140,6 +138,12 @@ def recognize_digit():
 
     # Get predicted digit
     digit = np.argmax(prediction)
+
+    # print(file)
+
+    # file_path = os.path.join('../frontend/src', file.filename)
+
+    # file.save(file_path)
 
     return jsonify({'prediction': str(num2words((digit)))})
 
