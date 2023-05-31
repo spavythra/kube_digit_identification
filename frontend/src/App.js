@@ -3,6 +3,8 @@ import axios from 'axios';
 import soundfile from './outputaudio.wav'
 import Message from './components/Message';
 import Progress from './components/Progress';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserSecret } from '@fortawesome/free-solid-svg-icons';
 
 function App() {
   const [prediction, setPrediction] = useState(null);
@@ -89,8 +91,9 @@ function App() {
 
   return (
     <div className='container mt-4'>
-      <h4 className='display-4 text-center mb-4'><i className='fab fa-react' /> React File Upload</h4>
+      <h4 className='display-4 text-center mb-4'><FontAwesomeIcon icon={faUserSecret} /> Digit Recognition App</h4>
 
+    <div className='p-2 border border-info'>
     <Fragment>
       {message ? <Message msg={message} /> : null}
       <form onSubmit={handleUpload}>
@@ -128,6 +131,7 @@ function App() {
         <button type="button" className='btn btn-primary btn-block mt-4' value={translation} onClick={convertTextToSpeech}>Play</button>
         </form>
       {audioUrl && <audio className="w-100 mt-4" id="plyr-audio-player" src={soundfile} controls />}
+    </div>
     </div>
     </div>
   );
