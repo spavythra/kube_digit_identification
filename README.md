@@ -1,20 +1,20 @@
-# Digit Recognition App 
-### Developed with 
-* React JS Front-end 
+# Digit Recognition App
+### Developed with
+* React JS Front-end
 * Python Flask back-end
 * microservices architecture
 * containerized with Docker
 * deployed using Kubernetes (minikube)
 
 ### Features
-Program flow is explained as a logical flow (Algorithm or pseudo code) of the Digit recognition is given in below steps. 
+Program flow is explained as a logical flow (Algorithm or pseudo code) of the Digit recognition is given in below steps.
 1.	Browse the handwritten image as input to browse section.
 2.	Clicking on upload button, uploads the image.
 3.	Once the model predicted the digit, it will show the output as a string below the upload button.
 4.	Clicking on translate button to translates the string.
 5.	The translated text will be displayed under the translate button.
 6.	Clicking on play button converts the translated text as speech.
-7.	The audio will be displayed under the play button. 
+7.	The audio will be displayed under the play button.
 8.	Clicking on the audio, it will pronounce the translated digit.
 
 
@@ -23,7 +23,7 @@ Program flow is explained as a logical flow (Algorithm or pseudo code) of the Di
 Docker-compose up --build
 
 ## Deployment
--- 
+--
 
 ## Acknowledgements
 --
@@ -49,3 +49,5 @@ Docker-compose up --build
 
 ![image](https://github.com/spavythra/kube_digit_identification/assets/87486009/f06f4ff2-10e1-4b3e-8302-c6172b998fc0)
 
+=======
+# digit_identification

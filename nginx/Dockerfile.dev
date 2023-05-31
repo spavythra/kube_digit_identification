@@ -1,0 +1,12 @@
+# Dockerfile
+
+# Stage 1: Build Nginx container
+FROM nginx:latest as build-stage
+COPY default.conf /etc/nginx/conf.d/default.conf
+
+# Stage 2: Final Nginx container
+FROM nginx:latest
+COPY --from=build-stage /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 3051
+CMD ["nginx", "-g", "daemon off;"]
