@@ -97,39 +97,42 @@ function App() {
     <Fragment>
       {message ? <Message msg={message} /> : null}
       <form onSubmit={handleUpload}>
-        <div className='custom-file mb-4'>
+      <div className='fs-4 text-center custom-file mb-4'>
+          Upload your image below
+        </div>
+        <div className='custom-file text-center mb-4'>
           <input
             type="file"
             accept="image/*"
             onChange={handleImage}
             className='custom-file-input'
           />
-          <label className='custom-file-label' htmlFor='customFile'>
-            {filename}
-          </label>
         </div>
 
         <Progress percentage={uploadPercentage} />
-
+        <div className="text-center">
         <input
           type='submit'
           value='Upload'
           className='btn btn-primary btn-block mt-4'
         />
+        </div>
       </form>
-      <div>{prediction && <p className="fs-4 p-1 custom-file-label bg-success text-center mt-4 text-white">The predicted number is <b>{prediction}</b></p>}</div>
+      <div>{prediction && <p className="fs-4 p-1 custom-file-label bg-info text-center mt-4 text-white">The predicted number is <p class="fw-bold text-uppercase">{prediction}</p></p>}</div>
     </Fragment>
 
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="text-center">
+    {prediction &&<form onSubmit={handleSubmit}>
         <button className='btn btn-primary btn-block mt-4' value={prediction} onClick={handleChange}>Translate</button>
-      </form>
-      {translation && <div className="fs-4 p-1 custom-file-label bg-success text-center mt-4 text-white">Finnish translation for the given number is <b>{translation}</b></div>}
+      </form>}
+      {translation && <div className="fs-4 p-1 custom-file-label bg-info text-center mt-4 text-white">Finnish translation for the given number is <p class="fw-bold text-uppercase">{translation}</p></div>}
     </div>
     <div>
-    <form>
+    {translation && <form>
+      <div className="text-center">
         <button type="button" className='btn btn-primary btn-block mt-4' value={translation} onClick={convertTextToSpeech}>Play</button>
-        </form>
+        </div>
+        </form>}
       {audioUrl && <audio className="w-100 mt-4" id="plyr-audio-player" src={soundfile} controls />}
     </div>
     </div>
