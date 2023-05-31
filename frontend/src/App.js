@@ -76,6 +76,7 @@ function App() {
       })
       .then(setTimeout(() => setUploadPercentage(0), 10000))
       .then(response => {
+        console.log(response);
         setPrediction(response.data.prediction)
         console.log(response);
       })

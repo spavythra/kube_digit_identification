@@ -125,8 +125,6 @@ def preprocess_image(image):
 def recognize_digit():
     # Get uploaded file from request
     file = request.files['image']
-
-    print("the file is ",file)
     # Read image file
     image = Image.open(io.BytesIO(file.read()))
 
