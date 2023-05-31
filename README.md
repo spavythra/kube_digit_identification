@@ -20,7 +20,7 @@ Program flow is explained as a logical flow (Algorithm or pseudo code) of the Di
 
 
 ## Installation
-Docker-compose up --build
+docker-compose up --build
 
 ## Deployment
 --
@@ -50,4 +50,3 @@ Docker-compose up --build
 ![image](https://github.com/spavythra/kube_digit_identification/assets/87486009/f06f4ff2-10e1-4b3e-8302-c6172b998fc0)
 
 =======
-# digit_identification
