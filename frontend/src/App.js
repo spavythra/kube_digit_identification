@@ -30,7 +30,6 @@ function App() {
     };
 
   const handleChange = (event) => {
-    console.log(event.target.value)
     setText(event.target.value);
   };
 
@@ -44,10 +43,8 @@ function App() {
       console.error('Error translating text:', error);
     }
   };
-  // const inputRef = useRef(null);
 
   function handleImage(e) {
-    console.log(e.target.files[0])
     setSelectedImage(e.target.files[0])
     setFilename(e.target.files[0].name);
   }
@@ -61,7 +58,6 @@ function App() {
 
     // Send FormData to Flask back-end
     try {
-      console.log("kkk")
       await axios.post('/recognize_digit', formData,{
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -76,9 +72,7 @@ function App() {
       })
       .then(setTimeout(() => setUploadPercentage(0), 10000))
       .then(response => {
-        console.log(response);
         setPrediction(response.data.prediction)
-        console.log(response);
       })
 
       setMessage('File Uploaded')
@@ -120,46 +114,21 @@ function App() {
           className='btn btn-primary btn-block mt-4'
         />
       </form>
-      {/* {prediction ? (
-        <div className='row mt-5'>
-          <div className='col-md-6 m-auto'>
-            <h3 className='text-center'>{filename}</h3>
-            <img style={{ width: '100%' }} src={`${filename}`} alt='' />
-          </div>
-        </div>
-      ) : null} */}
-      <div>{prediction && <p>Prediction: {prediction}</p>}</div>
+      <div>{prediction && <p className="fs-4 p-1 custom-file-label bg-success text-center mt-4 text-white">The predicted number is <b>{prediction}</b></p>}</div>
     </Fragment>
-
-    {/* <div>
-      <form onSubmit={handleUpload}>
-        <input type="file" accept="image/*" onChange={handleImage} />
-        <button type="submit">Recognize Digit</button>
-      </form>
-      {prediction && <p>Prediction: {prediction}</p>}
-    </div> */}
 
     <div>
       <form onSubmit={handleSubmit}>
-        <button value={prediction} onClick={handleChange}>Translate</button>
+        <button className='btn btn-primary btn-block mt-4' value={prediction} onClick={handleChange}>Translate</button>
       </form>
-      {translation && <div>Translation: {translation}</div>}
+      {translation && <div className="fs-4 p-1 custom-file-label bg-success text-center mt-4 text-white">Finnish translation for the given number is <b>{translation}</b></div>}
     </div>
     <div>
     <form>
-        <button type="button" value={translation} onClick={convertTextToSpeech}>Play</button>
+        <button type="button" className='btn btn-primary btn-block mt-4' value={translation} onClick={convertTextToSpeech}>Play</button>
         </form>
-      {audioUrl && <audio src={soundfile} controls />}
+      {audioUrl && <audio className="w-100 mt-4" id="plyr-audio-player" src={soundfile} controls />}
     </div>
-
-    {/* <button onClick={convertTextToSpeech}>Generate Audio</button>
-      {audioUrl && (
-        <div>
-          <audio controls>
-            <source src='./outputaudio.wav' type="audio/wav" />
-          </audio>
-        </div>
-      )} */}
     </div>
   );
 }
