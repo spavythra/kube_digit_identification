@@ -4,7 +4,6 @@
 * Python Flask back-end
 * microservices architecture
 * containerized with Docker
-* deployed using Kubernetes (minikube)
 
 ### Features
 Program flow is explained as a logical flow (Algorithm or pseudo code) of the Digit recognition is given in below steps.
