@@ -17,7 +17,6 @@ Program flow is explained as a logical flow (Algorithm or pseudo code) of the Di
 8.	Clicking on the audio, it will pronounce the translated digit.
 
 
-
 ## Installation
 docker-compose up --build
 
